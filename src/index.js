@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -15,7 +17,6 @@ loadBtn.addEventListener('click', loadHandler);
 function fetchQuery(query) {
   const BASE_URL = 'https://pixabay.com/api/';
   const apiKey = '39252796-33dd54a02d1582f089eb20416';
-  
   const params = new URLSearchParams({
     key: apiKey,
     q: query,
@@ -23,7 +24,7 @@ function fetchQuery(query) {
     orientation: 'horizontal',
     safesearch: true,
     page: pageNum,
-    per_page: 5,
+    per_page: 40,
   });
 
   return axios
@@ -42,9 +43,11 @@ function fetchQuery(query) {
 function createMarkup(arr) {
   return arr
     .map(
-      ({ webformatURL, tags, likes, views, comments, downloads }) => `
+      ({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => `
     <div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" height="200" loading="lazy" />
+    <a class="photo-link" href="${largeImageURL}">
+      <img src="${webformatURL}" alt="${tags}" height="200" loading="lazy" />
+    </a>
     <div class="info">
       <p class="info-item">
         <b>Likes</b>${likes}
@@ -80,6 +83,7 @@ function submitHandler(evt) {
     })
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
+      Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
       loadBtn.style.display = 'block';
     })
     .catch(error => {
@@ -107,8 +111,7 @@ function loadHandler() {
     .catch(error => console.error(error));
 }
 
-// webformatURL - посилання на маленьке зображення для списку карток.
-// largeImageURL - посилання на велике зображення.
+new SimpleLightbox(".photo-card", { captionsData: "alt", captionPosition: "top" });
 
 // async function getUser() {
 //     try {
