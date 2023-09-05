@@ -33,3 +33,7 @@
     display: block;
     margin: 0 auto 20px;
 }
+
+.photo-link:hover {
+  cursor: zoom-in;
+}

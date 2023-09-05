@@ -111,7 +111,7 @@ function loadHandler() {
     .catch(error => console.error(error));
 }
 
-new SimpleLightbox(".photo-link", { captionsData: "alt", captionPosition: "top" });
+new SimpleLightbox(".photo-link", { captionsData: "alt", captionPosition: "top", close: true, closeText: '×' });
 
 // async function getUser() {
 //     try {
