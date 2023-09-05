@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -10,11 +10,12 @@ const loadBtn = document.querySelector('.load-more');
 loadBtn.style.display = 'none';
 
 let pageNum = 1;
+let perPage = 40;
 
 submitBtn.addEventListener('click', submitHandler);
 loadBtn.addEventListener('click', loadHandler);
 
-function fetchQuery(query) {
+async function fetchQuery(query) {
   const BASE_URL = 'https://pixabay.com/api/';
   const apiKey = '39252796-33dd54a02d1582f089eb20416';
   const params = new URLSearchParams({
@@ -24,26 +25,35 @@ function fetchQuery(query) {
     orientation: 'horizontal',
     safesearch: true,
     page: pageNum,
-    per_page: 40,
+    per_page: perPage,
   });
 
-  return axios
+  const response = await axios
     .get(`${BASE_URL}?${params}`)
     .then(response => {
       if (response.status !== 200) {
         throw new Error(`Request failed with status ${response.status}`);
-      }      
+      }
       return response.data;
     })
     .catch(error => {
       throw error;
     });
+    return response;
 }
 
 function createMarkup(arr) {
   return arr
     .map(
-      ({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => `
+      ({
+        largeImageURL,
+        webformatURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `
     <div class="photo-card">
     <a class="photo-link" href="${largeImageURL}">
       <img src="${webformatURL}" alt="${tags}" height="200" loading="lazy" />
@@ -71,7 +81,7 @@ function submitHandler(evt) {
   evt.preventDefault();
 
   loadBtn.style.display = 'none';
-  gallery.innerHTML = '';  
+  gallery.innerHTML = '';
   let q = form.searchQuery.value;
   fetchQuery(q)
     .then(data => {
@@ -96,22 +106,30 @@ function submitHandler(evt) {
 
 function loadHandler() {
   pageNum += 1;
+
   let q = form.searchQuery.value;
-  console.log(q);
   fetchQuery(q)
     .then(data => {
       if (data.hits.length === 0) {
         throw new Error('No images found.');
-      }      
+      }
       return data;
     })
     .then(data => {
+      if (pageNum > data.totalHits / perPage) {
+        loadBtn.style.display = 'none';
+      }
       gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
     })
     .catch(error => console.error(error));
 }
 
-new SimpleLightbox(".photo-link", { captionsData: "alt", captionPosition: "top", close: true, closeText: '×' });
+new SimpleLightbox('.photo-link', {
+  captionsData: 'alt',
+  captionPosition: 'top',
+  close: true,
+  closeText: '×',
+});
 
 // async function getUser() {
 //     try {
