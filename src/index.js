@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -124,11 +124,10 @@ function loadHandler() {
     })
     .catch(error => console.error(error));
 }
-console.log('YO');
 
-// new SimpleLightbox('.photo-link', {
-//   captionsData: 'alt',
-//   captionPosition: 'top',
-//   close: true,
-//   closeText: '×',
-// });
+new SimpleLightbox('.photo-link', {
+  captionsData: 'alt',
+  captionPosition: 'top',
+  close: true,
+  closeText: '×',
+});
