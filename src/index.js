@@ -82,19 +82,22 @@ function submitHandler(evt) {
 
   loadBtn.style.display = 'none';
   gallery.innerHTML = '';
+  pageNum = 1;
   let q = form.searchQuery.value;
+  console.log(q, pageNum);
   fetchQuery(q)
     .then(data => {
       if (data.hits.length === 0) {
         throw new Error('No images found.');
       }
-      pageNum = 1;
       return data;
     })
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
       Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
-      loadBtn.style.display = 'block';
+      if (pageNum < data.totalHits / perPage) {
+        loadBtn.style.display = 'block';
+      }      
     })
     .catch(error => {
       console.error(error);
@@ -108,6 +111,7 @@ function loadHandler() {
   pageNum += 1;
 
   let q = form.searchQuery.value;
+  console.log(q, pageNum);
   fetchQuery(q)
     .then(data => {
       if (data.hits.length === 0) {
