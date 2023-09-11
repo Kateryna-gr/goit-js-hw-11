@@ -9,6 +9,7 @@
 
 .info {
   width: 300px;
+  margin: 0 auto;
   display: flex;
   font-variant: small-caps;
 }
@@ -21,17 +22,16 @@
 }
 
 .search-form {
-    
-    width: 250px;
-    display: block;
-    margin: 20px auto 0;
+  width: 250px;
+  display: block;
+  margin: 20px auto 0;
 }
 
 .load-more {
-    width: 100px;
-    font-variant: small-caps;
-    display: block;
-    margin: 0 auto 20px;
+  width: 100px;
+  font-variant: small-caps;
+  display: block;
+  margin: 0 auto 20px;
 }
 
 .photo-link:hover {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -28,18 +28,15 @@ async function fetchQuery(query) {
     per_page: perPage,
   });
 
-  const response = await axios
-    .get(`${BASE_URL}?${params}`)
-    .then(response => {
-      if (response.status !== 200) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-      return response.data;
-    })
-    .catch(error => {
-      throw error;
-    });
-    return response;
+  try {
+    const response = await axios.get(`${BASE_URL}?${params}`);
+    if (response.status !== 200) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 function createMarkup(arr) {
@@ -97,7 +94,7 @@ function submitHandler(evt) {
       Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
       if (pageNum < data.totalHits / perPage) {
         loadBtn.style.display = 'block';
-      }      
+      }
     })
     .catch(error => {
       console.error(error);
@@ -127,19 +124,11 @@ function loadHandler() {
     })
     .catch(error => console.error(error));
 }
+console.log('YO');
 
-new SimpleLightbox('.photo-link', {
-  captionsData: 'alt',
-  captionPosition: 'top',
-  close: true,
-  closeText: '×',
-});
-
-// async function getUser() {
-//     try {
-//       const response = await axios.get('/user?ID=12345');
-//       console.log(response);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
+// new SimpleLightbox('.photo-link', {
+//   captionsData: 'alt',
+//   captionPosition: 'top',
+//   close: true,
+//   closeText: '×',
+// });
