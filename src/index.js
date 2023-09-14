@@ -94,7 +94,8 @@ function submitHandler(evt) {
       Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
       if (pageNum < data.totalHits / perPage) {
         loadBtn.style.display = 'block';
-      }
+      } else
+        Notiflix.Notify.warning(`All found ${data.totalHits} images are shown.`);
     })
     .catch(error => {
       console.error(error);
@@ -118,6 +119,7 @@ function loadHandler() {
     })
     .then(data => {
       if (pageNum > data.totalHits / perPage) {
+        Notiflix.Notify.warning(`All found ${data.totalHits} images are shown.`);
         loadBtn.style.display = 'none';
       }
       gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
